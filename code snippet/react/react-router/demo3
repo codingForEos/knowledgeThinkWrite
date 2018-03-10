@@ -1,0 +1,40 @@
+import React,{PropType} from 'react';
+import ReactDOM from 'react-dom'
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Redirect,
+        withRouter
+    } from 'react-router-dom'
+
+const CustomLinkExample=()=>(
+    <Router>
+        <div>
+        {/* <ul>
+            <li><Link to='/home'>Home</Link></li>
+            <li><Link to='/about'>About</Link></li>
+        </ul> */}
+        <OldSchoolMenuLink path="/" label="Home"/>
+        <OldSchoolMenuLink path="/about" label="About"/>
+        <Route exact path="/" component={Home}/>
+        <Route path="/about" component={About}/>
+        </div>
+    </Router>
+)
+
+/* 一个包装过的路由 */
+const OldSchoolMenuLink = ({path,label}) =>(
+    <Route exact path={path} children={({match})=>(
+        match ? (
+            <li><Link to={path} >{`<${label}`}</Link></li>
+                ) :
+                (
+            <li><Link to={path} >{`${label}`}</Link></li>
+                )
+    )}/> 
+)
+const Home = () => <p>Home</p>
+const Home1 = () => <p>Home1</p>
+const About = () => <p>About</p>
+    
+ReactDOM.render(<CustomLinkExample />,document.getElementById('app'));

@@ -1,0 +1,26 @@
+import React,{PropType} from 'react';
+import ReactDOM from 'react-dom'
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Redirect,
+        Switch
+    } from 'react-router-dom'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+
+const AnimationExample = () =>{
+    const name=1;
+    return(
+        <Router>
+            <div>
+                hahha
+                <li><Link to='/home'>home</Link></li>
+                <Switch>
+                <Redirect from='/home' to="/user"/>
+                </Switch>
+            </div>
+        </Router>
+    )
+}
+
+ReactDOM.render(<AnimationExample />,document.getElementById('app'));

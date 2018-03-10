@@ -1,0 +1,29 @@
+import React,{PropType} from 'react';
+import ReactDOM from 'react-dom'
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Redirect,
+        Switch
+    } from 'react-router-dom'
+import { CSSTransitionGroup } from 'react-transition-group'
+import './index.css'
+
+const AmbiguousExample = () =>(
+    <Router>
+        <div>
+            <ul>
+                <li><Link to='/about'>关于我们</Link></li>
+                <li><Link to='/company'>公司</Link></li>
+                <li><Link to='/kim(dynamic)'>kim</Link></li>
+                <li><Link to='/Chris(dynamic)'>Chris</Link></li>
+            </ul>
+            <Switch>
+            <Route path="/about" render={()=><div>about</div>}/>
+            <Route path="/company" render={()=><div>company</div>}/>
+            <Route path='/:value' render={({match})=><div>{match.params.value}</div>}/>
+            </Switch>
+        </div>
+    </Router>
+)
+ReactDOM.render(<AmbiguousExample />,document.getElementById('app'));

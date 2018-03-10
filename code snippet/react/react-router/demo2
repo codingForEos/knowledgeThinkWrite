@@ -1,0 +1,102 @@
+import React,{PropType} from 'react';
+import ReactDOM from 'react-dom'
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Redirect,
+        withRouter
+    } from 'react-router-dom'
+
+/* 
+一个登陆页，未登陆的时候可以查看公共页，当点击保护页的时候会跳转到登陆页去，登陆后跳转到保护页
+ */
+
+const AuthExample = () =>(
+    <Router>
+        <div>
+            <AutoButton />
+            <ul>
+                <li><Link to="/public">公共页</Link></li>
+                <li><Link to="/protect">受保护页</Link></li>
+            </ul>
+            <Route path="/public" component={Public} />
+            <Route path="/login" component={Login} />
+            {/* PrivateRoute是一个人造路由,实际上是一个组件，里面返回了一个路由 */}
+            <Private path='/protect' component={Protect}/>
+        </div>
+    </Router>
+)
+
+const Private =({component:Component,...rest})=>(
+    <Route {...rest} render={(props)=>(
+        fakeAuth.isAuthenticated ? <Component /> :
+            (
+                <Redirect to={{
+                    pathname:"/login",
+                    state:{from:props.location}
+                }}/>
+            )
+        )}
+    />
+)
+const AutoButton = withRouter(({history})=>(
+    fakeAuth.isAuthenticated ? 
+    (
+        <div>
+            <p>您好,张涛</p>
+            <button onClick={()=>{
+                fakeAuth.signout(()=>history.push('/'))}}>
+                退出
+            </button>
+        </div>
+    ):(
+        <p>您好，您还没有登陆</p>
+    )
+)
+)
+
+const Public = () =>( <h2>公工页</h2>)
+const Protect = () =>( <h2>私有页</h2>)
+
+class Login extends React.Component{
+    state = {
+        redirectToReferrer:false
+    }
+    login = () =>{
+        fakeAuth.authenticate(()=>{
+            this.setState({ redirectToReferrer:true})
+        })
+    }
+    render(){
+        const {from} = this.props.location.state || {from:{pathname:'/'}}
+        console.log(from);
+        const { redirectToReferrer } = this.state;
+        if ( redirectToReferrer ){
+            return(
+                <Redirect to={from}/>
+            )
+        }
+        return(
+            <div>
+                <p>请先登陆</p>
+                <button onClick={this.login}>登陆</button>
+            </div>
+        )
+    }
+}
+
+{/* 纪录登陆状态和变更登陆状态的方法 */}
+const fakeAuth = {
+    isAuthenticated:false,
+    // 登陆标志位
+    authenticate(cd){
+        this.isAuthenticated = true;
+        setTimeout(cd, 100);
+    },
+    signout(cb){
+        this.isAuthenticated = false;
+        setTimeout(cb,100);
+    }
+}
+
+ReactDOM.render(<AuthExample />,document.getElementById('app'));

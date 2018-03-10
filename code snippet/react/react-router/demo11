@@ -1,0 +1,90 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Switch,
+        Redirect
+    } from 'react-router-dom'
+
+import {Provider,combineReducers} from 'react-redux';
+import { createStore, connect} from "redux";
+
+import './index.scss'
+
+/**
+ * Redux的三大原则 
+ * 1、这个应用只有唯一一个可信的数据源，也就是只有一个store
+ * 2、State只能通过Action来更新
+ * 3、State的更改必须写成纯函数，也就是每次更改总是返回一个新的state，在redux里这种函数叫作reducer
+ */
+
+// 使用connect(mapStateToProps,mapDisPatchProps)()使已有组件和store进行关联
+// mapStateToProps函数返回一个对象，这个对象一般只有属性，属性可以在被关联的组件的props中得到，这个属性的属性值一般来自redux的state，这个函数的作用是根据state中的值来更新组件的props，进而改变组件的样式
+// mapDisPatchProps函数返回一个对象，这个对象里一般只有方法，这个方法可以在被关联的组件的peops中得到，这个方法的作用一般就是触发一个dispath去改变state的值
+function mapStateToProps(state) {
+    return{
+        propName:state.propName
+    }
+}
+
+function mapDisPatchProps(dispatch) {
+    return{
+        someAction(arg){dispatch(someActionCreater(arg))}
+    }
+}
+
+const App = ({propName,someAction}) => (
+    <div>
+        <div onClick={someAction.bind(this,'arg')}>{propName}</div> 
+    </div>
+)
+
+// 使用connect高阶函数使普通react组件可以根据state改变props进而改变view，也可以调用dispatch函数用来改变state的状态
+const CApp = connect(mapStateToProps,mapDisPatchProps)(App)
+
+// createStore(reducers)函数，作用：将总的reducers包装成store，store里包含:
+// 1、Hold住整个应用的State状态树
+// 2、提供一个getState()方法获取State
+// 3、提供一个dispatch() 方法发送action改变State
+// 4、提供一个subscribe()方法注册回掉函数监听State的更改
+// 
+const store = createStore(todoApp);
+
+// 创建监听state函数，监听State状态改变
+let unsubscribe = store.subscribe(()=>console.log(store.getState()));
+
+unsubscribe();
+
+// 你也可以在任何组件中显示的调用dispatch来改变State
+// 注意在组件中调用时，应该先将dispatch传入到需要调用的组件中
+store.dispatch(someAction(playload))
+
+// combineReducers({....})函数，用来将各个分开的reducer组合在一起，形成一个总的reducers
+const todoApp = combineReducers({
+    todos
+})
+
+// todos函数就是一部分reducer 它可以接受oldState和action来生成新的state 
+// reducer的作用可以用这个公式精炼的表达（oldState, action）=> newState
+const todos = (state=[],action)=>{
+    switch (action.type) {
+        case "typeValue":
+            return(
+                {newState}
+            )
+        default:
+            return state
+    }
+}
+
+// someAction 是一个actionCreater，用来返回一个“动作”
+// 这个动作带有动作类型和payload即动作需要携带的最小信息量
+const someAction = (payload) => {type:'typeValue',payload}
+// 所有使用connect高阶函数包装的组件必须包含在<Provider store={store}></Provider>这个标签内
+ReactDOM.render(
+    <Provider store={store}>
+        <CApp />
+    </Provider>
+)

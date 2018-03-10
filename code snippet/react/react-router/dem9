@@ -1,0 +1,77 @@
+import React,{PropType} from 'react';
+import ReactDOM from 'react-dom'
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Redirect,
+        Switch
+    } from 'react-router-dom'
+import { CSSTransitionGroup } from 'react-transition-group'
+import './index.css'
+
+/* you'll need this CSS somewhere 
+the name is index.css
+
+.fade-enter {
+  opacity: 0;
+  z-index: 1;
+}
+
+.fade-enter.fade-enter-active {
+  opacity: 1;
+  transition: opacity 250ms ease-in;
+}
+*/
+
+const AnimationExample = () =>{
+    return(
+        <Router>
+            {/*套在最外边的<Route>的作用是为了缓存住此时的链接中的loaction值  */}
+                <div>
+                    <Route exact path='/' render={()=>(
+                        <Redirect to='/10/90/50'/>
+                    )}/>
+                    <ul style={{overflow:'hidden'}}>
+                    <li style={style.li}><Link style={style.link} to='/10/90/50'>红色</Link></li>
+                    <li style={style.li}><Link style={style.link} to='/120/100/40'>绿色</Link></li>
+                    <li style={style.li}><Link style={style.link} to='/200/100/40'>蓝色</Link></li>
+                    <li style={style.li}><Link style={style.link} to='/310/100/50'>粉色</Link></li>
+                    </ul>
+                    <div>
+                    <Route key='狗狗' path='/:h/:s/:l' render={({match,location})=>(
+                        <CSSTransitionGroup
+                            transitionName="fade"
+                            transitionEnterTimeout={500}
+                            transitionLeaveTimeout={500}>
+                            <div 
+                            key={location.key} 
+                            style={{height:'400px',width:'100%',
+                                    fontSize:'60px',
+                                    textAlign:'center',
+                                    color:'white',
+                                    lineHeight:'300px',
+                                    position:'absolute', backgroundColor: `hsl(${match.params.h},${match.params.s}%,${match.params.l}%)` }}>
+                            {`${match.params.h}${match.params.s}${match.params.l}彩色小狗`}
+                            </div>
+                        </CSSTransitionGroup>
+                    )}/>
+                    </div>
+                </div>
+        </Router>
+    )
+}
+
+const style={
+    li:{
+        float:"left",
+        listStyleType:'none',
+        padding:'20px',
+        fontSize:'30px',
+    },
+    link:{
+        color: 'red'
+    }
+}
+
+
+ReactDOM.render(<AnimationExample />,document.getElementById('app'));

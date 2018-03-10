@@ -1,0 +1,33 @@
+import React,{PropType} from 'react';
+import ReactDOM from 'react-dom'
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Redirect,
+        Switch,
+        withRouter
+    } from 'react-router-dom'
+
+const NoMatchExample = () =>(
+    <Router>
+        <div>
+            <ul>
+                <li><Link to="/">首页</Link></li>
+                <li><Link to="/old-match">会被重定向的项</Link></li>
+                <li><Link to="/will-match">不会重定向的项</Link></li>
+                <li><Link to="/will-not-match">不会被匹配</Link></li>
+                <li><Link to="/also/will/not/match">依然是不会被匹配的项</Link></li>
+            </ul>
+            {/* <Switch> 可以保证，当遇到匹配的<Route>将不会尝试匹配<Switch>标签内剩下的<Route> 
+                类似switch case 里case后面的语句没有break */}
+            <Switch>
+            <Route path="/" exact render={()=>(<div>首页</div>)}/>
+            <Redirect path="/old-match" to="/will-match"/>
+            <Route path="/will-match" render={()=><div>不会重定向的项</div>}/>
+            <Route render={(loaction)=><div>{`404,不能被匹配到${location.pathname}`}</div>} />
+            </Switch>
+        </div>
+    </Router>
+)
+
+ReactDOM.render(<NoMatchExample />,document.getElementById('app'));

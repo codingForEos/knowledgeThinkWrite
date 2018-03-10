@@ -1,0 +1,52 @@
+import React,{PropType} from 'react';
+import ReactDOM from 'react-dom'
+import {BrowserRouter as Router,
+        Route,
+        Link,
+    } from 'react-router-dom'
+
+// 路由集合
+const Routes = [
+    { path:"/",
+      name:'home',
+      exact:true,
+      sidebar:() => <div>home(sidebar)!</div>,
+      main:() => <h4>Home(main)</h4>
+    },
+    { path:'/bubblegum',
+      name:'bubblegum',
+      exact:false,
+      sidebar:() => <div>bubblegum(sidebar)</div>,
+      main:() => <h4>bubblegum(main)</h4>
+    
+    },
+    { path:'/shoelaces',
+      name:'shoelaces',
+      exact:false,
+      sidebar:() => <div>shoelaces(sidebar)</div>,
+      main:() => <h4>shoelaces(main)</h4>
+    }
+]
+
+const SidebarExample = () =>(
+    <Router>
+        <div style={{display:'flex'}}>
+            <div style={{padding:'10px',width:'40%',backgroundColor:"yellow"}}>
+                <ul style={{padding:'0px'}}>
+                    {Routes.map((route,index)=>(
+                        <li style={{listStyleType:'none',padding:'0px'}} key={index}><Link to={route.path}>{route.name}</Link></li>
+                    ))}
+                </ul>
+                {Routes.map((route,index) => (
+                    <Route key={index} exact={route.exact} path={route.path} component={route.main}/>
+                ))}
+            </div>
+            <div style={{flex:'1',padding:'10px'}}>
+                {Routes.map((route, index) => (
+                    <Route key={index} exact={route.exact} path={route.path} component={route.sidebar} />
+                ))}
+            </div>
+        </div>
+    </Router>
+)
+ReactDOM.render(<SidebarExample />,document.getElementById('app'));
