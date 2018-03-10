@@ -1,0 +1,35 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Switch,
+        Redirect
+    } from 'react-router-dom'
+
+import {Provider,combineReducers} from 'react-redux';
+import { createStore, connect} from "redux";
+
+import './index.scss'
+
+// <Mailbox unreadMessage={['react','Re:react','Re:Re:react']}/>
+const Mailbox = (props) =>{
+    const unreadMessage = props.unreadMessage
+    return(
+        <div>
+            <h1>hello</h1>
+            {
+                unreadMessage.length > 0 && (
+                    <h2>
+                        You have {unreadMessage.length}
+                    </h2>
+                )
+            }
+        </div>
+    )
+}
+ReactDOM.render(
+    <Mailbox unreadMessage={['react', 'Re:react', 'Re:Re:react']} />,
+    document.getElementById('app')
+)

@@ -1,0 +1,32 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Switch,
+        Redirect
+    } from 'react-router-dom'
+
+import {Provider} from 'react-redux';
+import { createStore } from "redux";
+
+import './index.scss'
+
+// const HelloMessage = (props) => {
+//    return(
+//     <div>Hello {props.name}</div>
+//    )
+// }
+
+class HelloMessage extends React.Component{
+    render(){
+        return(
+            <div>Hello {this.props.name}</div>
+        )
+    }
+}
+
+ReactDOM.render(
+    <HelloMessage name="小笨狗"/>
+    ,document.getElementById('app'));

@@ -1,0 +1,38 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Switch,
+        Redirect
+    } from 'react-router-dom'
+
+import {Provider,combineReducers} from 'react-redux';
+import { createStore, connect} from "redux";
+
+import './index.scss'
+
+// 要编写表单一个非受控组件，而非为每个状态更新编写事件处理函数程序，你可以使用ref从DOM获取表单值。
+class NameForm extends React.Component{
+    constructor(props){
+        super(props)
+    }
+    handleSubmit = (event) =>{
+        event.preventDefault();
+        console.log('输出框的值：'+this.input.value)
+    }
+    render(){
+        return(
+            <form onSubmit={this.handleSubmit} >
+                <label >名称：<input type='text' ref={input =>this.input = input}/></label>
+                <input type="submit" />
+            </form>
+        )
+    }
+}
+
+ReactDOM.render(
+    <NameForm />,
+    document.getElementById('app')
+)

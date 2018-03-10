@@ -1,0 +1,34 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Switch,
+        Redirect
+    } from 'react-router-dom'
+
+import {Provider,combineReducers} from 'react-redux';
+import { createStore, connect} from "redux";
+
+import './index.scss'
+
+// 利用if{}else{} 和 props 实现条件渲染
+// 我们将创建一个Grreeting组件，它会根据用户是否登陆来显示其中之一：
+//调用<Greeting isLoggedIn={false/true}>
+const Greeting= (props) =>{
+    const isLoggedIn = props.isLoggedIn
+    if(isLoggedIn){
+        return(<UserGreeting />);
+    }else{
+        return(<GuestGreeting />)
+    }
+}
+
+const UserGreeting = () =>(<h1>Welcome back!</h1>)
+const GuestGreeting = () =>( <h1>Please sign up.</h1> )
+
+ReactDOM.render(
+    <Greeting isLoggedIn={true} />,
+    document.getElementById('app')
+)

@@ -1,0 +1,45 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Switch,
+        Redirect
+    } from 'react-router-dom'
+
+import {Provider,combineReducers} from 'react-redux';
+import { createStore, connect} from "redux";
+
+import './index.scss'
+
+// <CustomTextInput inputRef>
+const CustomTextInput = (props) =>(
+    <div>
+        <input ref={props.inputRef}/>
+    </div>
+)
+// <Parent inputRef>
+const Parent = (props) =>(
+    <div>
+        My input:<CustomTextInput inputRef={props.inputRef}/>
+    </div>
+)
+class Grandparent extends React.Component{
+    handleChange = () =>{
+        console.log(this.inputElement.value)
+    }
+    render(){
+        return(
+            <div>
+                <Parent inputRef={el =>this.inputElement = el}/>
+                <input type='button' onClick={this.handleChange} />
+            </div>
+        )
+    }
+}
+
+ReactDOM.render(
+    <Grandparent />,
+    document.getElementById('app')
+)

@@ -1,0 +1,91 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Switch,
+        Redirect
+    } from 'react-router-dom'
+
+import {Provider,combineReducers} from 'react-redux';
+import { createStore, connect} from "redux";
+
+import './index.scss'
+
+/**
+ * 表单在react中比较特殊，由于react的思想就是用state控制所有的状态，而表单元素本身就自带一些状态，这就与react的思想有些冲突了
+ * 所以在react里将表单的元素进行了划分，规定某些元素的某些属性是状态属性，一旦设置了这些属性的值，那么表单元素的状态都要交由react来处理(即受控组件)
+ * 如果不设置这些属性，或者将其设为null。那就还是传统意义上的那些表单元素(表单元素自己控制自己的状态)
+ */
+
+// value是 <input> 和<textarea>的受控属性，如果定义了，那么最直观的改变是无论输入什么，输入框内的值都是hello，涉及到UI的变更都由react来控制了
+// 此时如果想要改变输入框中的值，就要用到onChange事件来改变状态属性value的值
+
+//  未设置value的值的<input type=‘text’/>，属于非受控组件
+class Inputf extends React.Component{
+    render(){
+        return <input type='text'/>
+    }
+}
+// 设置了value的值<input type=‘text’/>，属于受控组件
+class Input extends React.Component{
+    render(){
+        return <input type='text' value='hello' />
+    }
+}
+
+// 未设置value的值的<textarea/>,属于非受控组件
+const Textareaf = () => <textarea/>
+//设置value的值的<textarea/>，属于受控组件
+const Textarea = () => <textarea value='hello'/>
+
+// 未设置checked的<input type='checkbox'/>,属于非受控组件
+const Checkboxf = () => <input type='checkbox' />
+// 设置checked的<input type='checkbox'/>,属于受控组件
+const Checkbox = () => <input type='checkbox' checked={true}/>
+
+//未设置checked的<input type='radio'/>,属于非受控组件
+const Radiof = () => <div><input type='radio' /> <input type='radio' /></div>
+//设置了checked的<input type='radio'/>,属于受控组件
+const Radio = () => <div><input type='radio' checked={false}/></div>
+
+// 未设置value的<select>,属于非受控组件
+const Optionf = () => 
+    <select>
+        <option value='小狗狗'>小狗狗</option>
+        <option value='小小狗'>小小狗</option>
+        <option value='小小小'>小小小</option>
+        <option value='狗狗狗'>狗狗狗</option>
+    </select>
+// 设置value的<select>,属于受控组件
+const Option = () =>
+    <select value='小小小'>
+        <option value='小狗狗'>小狗狗</option>
+        <option value='小小狗'>小小狗</option>
+        <option value='小小小'>小小小</option>
+        <option value='狗狗狗'>狗狗狗</option>
+    </select>
+
+// 如果你希望输入到受控输入框中的内容反馈到输入框上，就要使用onChange事件改变状态属性value的值
+// 思路,1、在受控组件上绑定onChange事件处理函数，该事件处理函数的内容是根据受控组件的值改变react组件的state值，
+//     2、设置受控组件的value值为react组件的state，当state值改变时，react组件会自动渲染改版的DOM
+class Inputs extends React.Component{
+    constructor(props){
+        super(props)
+    }
+    state = { value: '' }
+    handleChange(e){
+        // console.log(e.target.value)
+        // .substr(a,b)的作用是从下标是a的元素开始，截取长度为b的字符串
+        this.setState({ value: e.target.value.substr(0,10) })
+    }
+    render(){
+        let value = this.state.value
+        return <textarea value={value} onChange={this.handleChange.bind(this)}/>
+    }
+}
+ReactDOM.render(
+    <Inputs />,
+    document.getElementById('app')
+)

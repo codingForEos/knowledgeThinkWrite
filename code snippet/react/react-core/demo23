@@ -1,0 +1,55 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Switch,
+        Redirect
+    } from 'react-router-dom'
+
+import {Provider,combineReducers} from 'react-redux';
+import { createStore, connect} from "redux";
+
+import './index.scss'
+
+class ListOfWords extends React.PureComponent{
+    render(){
+        //a=['a','b','b'] 
+        //a.join('+')
+        //返回:a+b+c
+        return <div>{this.props.words.join(',')}</div>
+    }
+}
+
+// 注意！ 使用React.PureComponent继承来的组件，为了提高性能使用了“浅比较”
+// 即如果引用没有改变，相应的组件就不会被渲染,所以更新属性或者状态时，要“刻意”返回一个新的对象
+class WordAdder extends React.PureComponent{
+    constructor(props){
+        super(props)
+        this.state = {
+            words:['marklar']
+        }
+    }
+    handleClick = () =>{
+        //注意！正确写法
+        // this.setState(prevState => ( {words:[...prevState.words,'marklar']} ))
+        // 注意！错误写法
+        const words = this.state.words
+        words.push('marklar')
+        this.setState({words:words})
+    }
+    render(){
+        return(
+            <div>
+                <button onClick={this.handleClick}>提交</button>
+                <ListOfWords words={this.state.words} />
+            </div>
+        )
+    }
+}
+
+ReactDOM.render(
+    <WordAdder />,
+    document.getElementById('app')
+)

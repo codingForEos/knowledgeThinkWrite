@@ -1,0 +1,42 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Switch,
+        Redirect
+    } from 'react-router-dom'
+
+import {Provider} from 'react-redux';
+import { createStore } from "redux";
+
+import './index.scss'
+
+// 使用该组件时，应给出username属性，如：<ProfilePic username={'小狗'} />
+const ProfilePic = (props) =>{
+    return(
+        <img src={'http://graph.facebook.com/' + props.username + '/picture'}/>
+    )
+}
+
+// 使用该组件时，应给出username属性，如：<ProfileLink username={'小狗'}}>
+const ProfileLink = (props) =>{
+    return(
+        <a href={'http://www.facebook.com/' + props.username}>
+            {props.username}
+        </a>
+    )
+}
+
+const Avatar = (props) =>{
+    return(
+        <div>
+            <ProfilePic username={props.username} />
+            <ProfileLink username={props.username}/>
+        </div>
+    )
+}
+ReactDOM.render(
+    <Avatar username={'pwh'}/>
+    ,document.getElementById('app'));

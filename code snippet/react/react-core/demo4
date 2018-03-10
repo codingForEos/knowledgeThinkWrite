@@ -1,0 +1,36 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Switch,
+        Redirect
+    } from 'react-router-dom'
+
+import {Provider} from 'react-redux';
+import { createStore } from "redux";
+
+import './index.scss'
+
+// 使用该组件时，应该传递给该组件一个data属性，如:<ListItemWrapper data=‘小狗’/>
+const ListItemWrapper = (props) => <li>{props.data.text}</li>
+
+// 使用数组的map()方法来直接渲染出子组件，注意每个子组件必须定义不同的key属性
+// 使用该属性时，应该传递给该组件一个results属性，如：<MyComponent results=[{id:1,text:'一只小狗'}}/>
+const MyComponent = (props) => (
+    <ul>
+        {props.results.map((result) => (<ListItemWrapper key={result.id} data={result} />))}
+    </ul>
+)
+
+const results=[
+    {id:'1',text:'第一只小狗'},
+    {id:'2',text:'第二只小狗'},
+    {id:'3',text:'第三只小狗'},
+    {id:'4',text:'第四只小狗'},
+    {id:'5',text:'第五只小狗'},
+]
+ReactDOM.render(
+    <MyComponent results={results}/>
+    ,document.getElementById('app'));

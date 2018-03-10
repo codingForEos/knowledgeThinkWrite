@@ -1,0 +1,44 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Switch,
+        Redirect
+    } from 'react-router-dom'
+
+import {Provider,combineReducers} from 'react-redux';
+import { createStore, connect} from "redux";
+
+import './index.scss'
+
+class Reservation extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {isGoing:true,numberOfGuests:2};
+    }
+    handleInputChange = (e) =>{
+        const target = e.target
+        // 根据点击元素的name属性来获取点击元素的值
+        const value = target.name === 'isGoing' ? target.checked : target.value;
+        console.log(value);
+        this.setState({[target.name]:value});
+    }
+    render(){
+        return(
+            <form>
+                <label >
+                    Isgoing: <input name="isGoing" type="checkbox" onChange={this.handleInputChange} checked={this.state.isGoing}/>
+                </label><br />
+                <label >
+                    Number of guests: <input name="numberOfGuests" type="number" onChange={this.handleInputChange} value={this.state.numberOfGuests}/>
+                </label>
+            </form>
+        )
+    }
+}
+ReactDOM.render(
+    <Reservation />,
+    document.getElementById('app')
+)

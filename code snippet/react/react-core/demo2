@@ -1,0 +1,52 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Switch,
+        Redirect
+    } from 'react-router-dom'
+
+import {Provider} from 'react-redux';
+import { createStore } from "redux";
+
+import './index.scss'
+
+
+
+class App extends React.Component{
+    constructor(props){
+        super(props)
+    }
+    state={
+        userInput:''
+    }
+    handleChange(e){
+        this.setState({userInput:e.target.value})
+        console.log(this.state)
+    }
+    clearAndFocusInput(){
+        this.setState({userInput:''},()=>{
+            this.refs.theInput.focus();
+        })
+    }
+    render(){
+        return(
+            <div>
+                <div onClick={this.clearAndFocusInput.bind(this)}>
+                    点击
+                </div>
+                <input
+                    ref = 'theInput'
+                    value={this.state.userInput}
+                    onChange={this.handleChange.bind(this)}
+                />
+            </div>
+        )
+    }
+}
+
+ReactDOM.render(
+    <App name="小笨狗"/>
+    ,document.getElementById('app'));

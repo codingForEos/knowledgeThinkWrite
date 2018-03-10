@@ -1,0 +1,49 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Switch,
+        Redirect
+    } from 'react-router-dom'
+
+import {Provider,combineReducers} from 'react-redux';
+import { createStore, connect} from "redux";
+
+import './index.scss'
+
+class CustomTextInput extends React.Component{
+    constructor(props){
+        super(props)
+    }
+    focus = () =>{
+        this.textInput.focus();
+    }
+    render(){
+        //使`ref`的回调将text输入框的DOM节点存储到React
+        // 实例上(比如 this.textInput)
+        //注意`ref={(input)=>this.Input=input}回掉函数只能使用在用Class声明的组件或者DOM元素上
+        return(
+            <div>
+                <input type='text' ref={(input)=>this.textInput = input} />
+                <input type='button' value='Focus the text input' onClick={this.focus} />
+            </div>
+        )
+    }
+}
+class AutoFocusTextInput extends React.Component{
+    componentDidMount(){
+        this.textInput.focus()
+    }
+    render(){
+        return(
+            <CustomTextInput ref={(input)=>this.textInput = input}/>
+        )
+    }
+}
+
+ReactDOM.render(
+    <AutoFocusTextInput />,
+    document.getElementById('app')
+)

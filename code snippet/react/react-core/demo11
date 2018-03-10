@@ -1,0 +1,67 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Switch,
+        Redirect
+    } from 'react-router-dom'
+
+import {Provider,combineReducers} from 'react-redux';
+import { createStore, connect} from "redux";
+
+import './index.scss'
+
+// 利用if{}else{} 和 props 实现条件渲染
+// 我们将创建一个Grreeting组件，它会根据用户是否登陆来显示其中之一：
+//调用<Greeting isLoggedIn={false/true}>
+const Greeting= (props) =>{
+    const isLoggedIn = props.isLoggedIn
+    if(isLoggedIn){
+        return(<UserGreeting />);
+    }else{
+        return(<GuestGreeting />)
+    }
+}
+
+const UserGreeting = () =>(<h1>Welcome back!</h1>)
+const GuestGreeting = () =>( <h1>Please sign up.</h1> )
+
+// <LoginButton onClick={someFuction}>
+const LoginButton = (props) =>( <button onClick={props.onClick}>Login</button> )
+// <LogoutButton onClick={someFunction}>
+const LogoutButton = (props) =>( <button onClick={props.onClick}>Logout</button> )
+// LoginControl登陆退出切换组件
+class LoginControl extends React.Component{
+    constructor(props){
+        super(props)
+        this.state={isLoggedIn:false}
+    }
+    handleLoginClick = () =>{
+        this.setState({isLoggedIn:true})
+    }
+    handleLoginoutClick = () =>{
+        this.setState({isLoggedIn:false})
+    }
+    render(){
+        const isLoggedIn = this.state.isLoggedIn
+        let button = null;
+        if(isLoggedIn){
+            button = <LogoutButton onClick={this.handleLoginoutClick}/>
+        }else{
+            button = <LoginButton onClick={this.handleLoginClick}/>
+        }
+
+        return (
+            <div>
+                <Greeting isLoggedIn={isLoggedIn} />
+                {button}
+            </div>
+        )
+    }
+}
+ReactDOM.render(
+    <LoginControl/>,
+    document.getElementById('app')
+)

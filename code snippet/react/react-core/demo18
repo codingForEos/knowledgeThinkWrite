@@ -1,0 +1,94 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Switch,
+        Redirect
+    } from 'react-router-dom'
+
+import {Provider,combineReducers} from 'react-redux';
+import { createStore, connect} from "redux";
+
+import './index.scss'
+
+//util
+const scaleNames = {
+    c:'Celsius',
+    f:'Fahrenheit'
+}
+// util 转换函数华氏温度和摄氏温度转换
+const toCelsius = (fahrenheit) => ((fahrenheit - 32) * 5 / 9);
+const toFahrenheit = (celsius) => ((celsius * 9 / 5) + 32);
+const tryConvert = (temperature, convert) => {
+    const input = parseFloat(temperature);
+    if (Number.isNaN(input)) {
+        return '';
+    } else {
+        const output = convert(input)
+        const rounded = Math.round(output * 1000) / 1000;
+        return rounded.toString();
+    }
+}
+
+// 根据celsius属性来渲染不同的组件<BoilingVerdict celsius={number}>
+const BoilingVerdict = (props) =>{
+    if (props.celsius >=100){
+        return <p>水会烧开</p>
+    }else{
+        return <p>水不会开</p>
+    }
+}
+// 输入框组件 scale属性用于判断<fieldset>标签的标题,temperature属性用于回显input里的值
+// onTemperatureChange设置用于状态提升的函数,将父组件的方法赋给子组件的props，然后让子组件调用，改变父组件的state,来实现动态改变子组件的功能
+//<TemperatureInput scale='c or f' temperature={string} onTemperatureChange={function}/>
+class TemperatureInput extends React.Component{
+    constructor(props){
+        super(props)
+    }
+    handleChange = (e) =>{
+        this.props.onTemperatureChange(e.target.value)
+    }
+    render(){
+        const temperature = this.props.temperature;
+        const scale = this.props.scale;
+        return(
+            <fieldset>
+                <legend>Enter temperature in {scaleNames[scale]}</legend>
+                <input type='text' value={temperature} onChange={this.handleChange}/>
+            </fieldset>
+        )
+    }
+}
+
+//顶层组件
+class Calculator extends React.Component{
+    constructor(props){
+        super(props)
+        this.state={temperature:'',scale:'c'}
+    }
+    handleCelsiusChange = (temperature) =>{
+        this.setState({scale:'c',temperature})
+    }
+    handleFahrenheitChange = (temperature) =>{
+        this.setState({scale:'f',temperature})
+    }
+    render(){
+        const scale = this.state.scale
+        const temperature = this.state.temperature
+        const celsius = scale === 'f' ? tryConvert(temperature,toCelsius) : temperature
+        const fahrenheit = scale ==='c' ? tryConvert(temperature,toFahrenheit) : temperature
+        return(
+            <div>
+                <TemperatureInput scale='c' temperature={celsius} onTemperatureChange={this.handleCelsiusChange}/>
+                <TemperatureInput scale='f' temperature={fahrenheit} onTemperatureChange={this.handleFahrenheitChange}/>
+                <BoilingVerdict celsius={parseFloat(celsius)} />
+            </div>
+        )
+    }
+}
+ReactDOM.render(
+    <Calculator />,
+    document.getElementById('app')
+)

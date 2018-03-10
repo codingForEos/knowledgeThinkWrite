@@ -1,0 +1,67 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import {BrowserRouter as Router,
+        Route,
+        Link,
+        Switch,
+        Redirect
+    } from 'react-router-dom'
+
+import {Provider,combineReducers} from 'react-redux';
+import { createStore, connect} from "redux";
+
+import './index.scss'
+
+/**
+ * React元素都是不可变的，当元素被创建以后，你无法改变其内容或者属性。一个元素就好像是动画里的一帧，它代表应用界面在某一时间点的样子。
+ * 针对于无状态React组件，更新ui的唯一办法就是创建一个新元素，然后将它传入ReactDOM.render()方法
+  */
+
+// //   使用该组件时，应该设置一个date的属性
+// const Clock = (props) =>(
+//     <div>
+//         <h1>Hello,world</h1>
+//         <h2>It is {props.date.toLocaleTimeString()}.</h2>
+//     </div>
+// )
+// const tick = () => {
+//     ReactDOM.render(
+//         <Clock date={new Date()} />,
+//         document.getElementById('app')
+//     )
+// }
+
+// setInterval(tick,1000)
+
+class Clock extends React.Component{
+    constructor(props){
+        super(props)
+        this.state={date:new Date()}
+    }
+    // 当组件输出到DOM后会执行componentDidMount()钩子
+    componentDidMount(){
+        // this.timerID保存了整个定时器
+        this.timerID = setInterval(()=> this.tick(),1000)
+    }
+    // 当组件将要销毁时，卸载定时器：
+    componentWillUnmount(){
+        clearInterval(this.timerID);
+    }
+    tick(){
+        this.setState({date:new Date()})
+    }
+    render(){
+        return(
+            <div>
+                <h1>hello,world</h1>
+                <h2>It is {this.state.date.toLocaleTimeString()}</h2>
+            </div>
+        )
+    }
+}
+
+ReactDOM.render(
+    <Clock />,
+    document.getElementById('app')
+)
