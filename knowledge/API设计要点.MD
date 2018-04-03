@@ -28,9 +28,49 @@
 比如关闭弹窗的方法是`closeDialog`，显示弹窗应该是`openDialog`。`show`的意思是'显示',反义词应该是`hide`。
 附常用反义词组（有些带缩写）
 
-|     |
+| prev | next |
 |----|:----:|
 | in | out |
 | on | off |
+| show | hide |
+| close | open |
+| success |  fail |
+| before | after |
+| begin | end |
 
+1-4. 命名意义
+错误示例
+```
+//版本1
+function handle1(){
+}
+function handle2(){
+}
+//版本2
+function handleA(){
+}
+function handleB(){
+}
+//版本3
+function handleOne(){
+}
+function handleTwo(){
+}
+
+```
+正确姿势
+```
+function handleHome(){
+}
+function handleCollect(){
+}
+
+```
+
+2-5. 命名格式
+文章说的API，主要针对的是函数，但是在这一小块里面，也列举一下其它的目标的建议命名方式。
+
+| 待命名对象 | 推荐名称 |
+|-----------|:--------:|
+| 图片 | '-' '_' 
 
