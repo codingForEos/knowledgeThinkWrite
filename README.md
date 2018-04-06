@@ -5,3 +5,4 @@
 - `knowledge` 文件夹存放知识点。
 - `code snippet` 文件夹存放代码片段
 - `think && article` 文件夹存放个人技术感悟 
+- `miniProject`小型的工程，用于实践一些新的理念
